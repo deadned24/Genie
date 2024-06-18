@@ -18,4 +18,6 @@ Screenshots
 
 Notes
 ----------------
+THIS version has 'nohookah' effects blacklisted.
+You can add effects to the blacklist by setting a preference "genieBlacklist" with a comma separated list of effect ids \(eg: set genieBlacklist='2897,2898'\)
 If you want to disable the GUI while keeping it installed, well, there isn't a way yet, does anyone need it?
