@@ -1,7 +1,15 @@
+//Genie script, by ezandora
 import "relay/choice.ash";
 
+/*
+DeadNed's modified version. 
+blacklist "nohookah" effects, ids in user property "genieBlacklist", and also use the old blacklist
+search for __genie_invalid_effects map. old blacklist got renamed to __genie_invalid_effects1. 
+set genieBlacklist='2897,2898' to add those effects to blacklist.
+it would be ideal if, going forward, unwishable effects were tagged "nohookah" (or "nowish") in mafia so a blacklist wouldn't have to be maintained.
+*/
 
-string __genie_version = "2.2.20";
+string __genie_version = "2.2.21";
 
 //Allows error checking. The intention behind this design is Errors are passed in to a method. The method then sets the error if anything went wrong.
 record Error
@@ -4829,8 +4837,27 @@ boolean [monster] __genie_invalid_monsters = $monsters[ninja snowman assassin,mo
 
 //Ideally we would use the nohookah attribute, except "nohookah" and "wishable" do not always align; as an example, both Very Attractive and Barely Visible are wishable, but are marked nohookah. I think there might be another flag necessary?
 //Perhaps we should have an auto learning system that detects if something is not wishable, and if so, add it to a local file?
-boolean [effect] __genie_invalid_effects = $effects[jukebox hero,Juicy Boost,Meteor Showered,Steely-eyed squint,Blue Eyed Devil,Cereal Killer,Nearly All-Natural,Amazing,Throwing some shade,A rose by any other material,Gaze of the Gazelle,East of Eaten,Robot Friends,Smart Drunk,Margamergency,Pajama Party,Rumpel-Pumped,Song of Battle,Song of Solitude,Buy!\  Sell!\  Buy!\  Sell!,eldritch attunement,The Inquisitor's unknown effect,Filthworm Drone Stench,Filthworm Guard Stench,Filthworm Larva Stench,Green Peace,Red Menace,Video... Games?,things man was not meant to eat,Whitesloshed,thrice-cursed,bendin' hell,Synthesis: Hot,Synthesis: Cold,Synthesis: Pungent,Synthesis: Scary,Synthesis: Greasy,Synthesis: Strong,Synthesis: Smart,Synthesis: Cool,Synthesis: Hardy,Synthesis: Energy,Synthesis: Greed,Synthesis: Collection,Synthesis: Movement,Synthesis: Learning,Synthesis: Style,The Good Salmonella,Giant Growth,Lovebotamy,Open Heart Surgery,Wandering Eye Surgery,gar-ish,Puissant Pressure,Perspicacious Pressure,Pulchritudinous Pressure,It's Good To Be Royal!,The Fire Inside,Puzzle Champ,The Royal We,Hotform,Coldform,Sleazeform,Spookyform,Stenchform,A Hole in the World,Bored With Explosions,thanksgetting,Barrel of Laughs,Beer Barrel Polka,Superdrifting,Covetin' Drunk,All Wound Up,Driving Observantly,Driving Waterproofly,Bow-Legged Swagger,First Blood Kiwi,You've Got a Stew Going!,Shepherd's Breath,Of Course It Looks Great,Doing The Hustle,Fortune of the Wheel,Shelter of Shed,Hot Sweat,Cold Sweat,Rank Sweat,Black Sweat,Flop Sweat,Mark of Candy Cain,Black Day,What Are The Odds!?,Dancin' Drunk, School Spirited,Muffled,Sour Grapes,Song of Fortune,Pork Barrel,Ashen,Brooding,Purple Tongue,Green Tongue,Orange Tongue,Red Tongue,Blue Tongue,Black Tongue,Cupcake of Choice,The Cupcake of Wrath,Shiny Happy Cupcake,Your Cupcake Senses Are Tingling,Tiny Bubbles in the Cupcake,Broken Heart,Fiery Heart,Cold Hearted,Sweet Heart,Withered Heart,Lustful Heart,Pasta Eyeball,Cowlick,It's Ridiculous,Dangerous Zone Song,Tiffany's Breakfast,Flashy Dance Song,Pet Shop Song,Dark Orchestral Song,Bounty of Renenutet,Octolus Gift,Magnetized Ears,Lucky Struck,Drunk and Avuncular,Ministrations in the Dark,Record Hunger,SuperStar,Everything Looks Blue,Everything Looks Red,Everything Looks Yellow,Snow Fortified,Bubble Vision,High-Falutin',Song of Accompaniment,Song of Cockiness,Song of the Glorious Lunch,Song of the Southern Turtle,Song of Sauce,Song of Bravado,Song of Slowness,Song of Starch,Song of the North,It's a Good Life!,I'll Have the Soup,Why So Serious?,&quot;The Disease&quot;,Unmuffled,Overconfident,Shrieking Weasel,Biker Swagger,Punchable Face,ChibiChanged&trade;,Avatar of She-Who-Was,Behind the Green Curtain,Industrially Frosted,Mer-kinkiness,Hotcaked,[1553]Slicked-Back Do,Eggscitingly Colorful,Party on Your Skin,Blessing of the Spaghetto,Force of Mayo Be With You,Ear Winds,Desenfantasmada,Skull Full of Hot Chocolate,Hide of Sobek,Wassailing You,Barrel Chested,Mimeoflage,Tainted Love Potion,Avatar of the Storm Tortoise,Fortunate\, Son,Avatar of the War Snapper,Faerie Fortune,Heroic Fortune,Fantasy Faerie Blessing,Brewed Up,Poison For Blood,Fantastical Health,Spirit of Galactic Unity,Inner Elf,The Best Hair You've Ever Had,Hardened Sweatshirt,Yeast-Hungry,More Mansquito Than Man,Spiced Up,Warlock\, Warstock\, and Warbarrel,Tomes of Opportunity,Temporary Blindness,Rolando's Rondo of Resisto,Shielded Unit,Mist Form,Cinco Elementos,Brined Liver,There's No N in Love,Sacr&eacute; Mental,Transpondent,Hidden Power,Skeletal Buddy,Down the Rabbit Hole,Perceptive Pressure,Proficient Pressure,Pneumatic,Finstrong,Omphaloskepsis,Burning\, Man,Snarl of the Timberwolf]; //'
+
+//The Blacklist. Added to loop below (this is the old blacklist) - DN 
+boolean [effect] __genie_invalid_effects1 = $effects[jukebox hero,Juicy Boost,Meteor Showered,Steely-eyed squint,Blue Eyed Devil,Cereal Killer,Nearly All-Natural,Amazing,Throwing some shade,A rose by any other material,Gaze of the Gazelle,East of Eaten,Robot Friends,Smart Drunk,Margamergency,Pajama Party,Rumpel-Pumped,Song of Battle,Song of Solitude,Buy!\  Sell!\  Buy!\  Sell!,eldritch attunement,The Inquisitor's unknown effect,Filthworm Drone Stench,Filthworm Guard Stench,Filthworm Larva Stench,Green Peace,Red Menace,Video... Games?,things man was not meant to eat,Whitesloshed,thrice-cursed,bendin' hell,Synthesis: Hot,Synthesis: Cold,Synthesis: Pungent,Synthesis: Scary,Synthesis: Greasy,Synthesis: Strong,Synthesis: Smart,Synthesis: Cool,Synthesis: Hardy,Synthesis: Energy,Synthesis: Greed,Synthesis: Collection,Synthesis: Movement,Synthesis: Learning,Synthesis: Style,The Good Salmonella,Giant Growth,Lovebotamy,Open Heart Surgery,Wandering Eye Surgery,gar-ish,Puissant Pressure,Perspicacious Pressure,Pulchritudinous Pressure,It's Good To Be Royal!,The Fire Inside,Puzzle Champ,The Royal We,Hotform,Coldform,Sleazeform,Spookyform,Stenchform,A Hole in the World,Bored With Explosions,thanksgetting,Barrel of Laughs,Beer Barrel Polka,Superdrifting,Covetin' Drunk,All Wound Up,Driving Observantly,Driving Waterproofly,Bow-Legged Swagger,First Blood Kiwi,You've Got a Stew Going!,Shepherd's Breath,Of Course It Looks Great,Doing The Hustle,Fortune of the Wheel,Shelter of Shed,Hot Sweat,Cold Sweat,Rank Sweat,Black Sweat,Flop Sweat,Mark of Candy Cain,Black Day,What Are The Odds!?,Dancin' Drunk, School Spirited,Muffled,Sour Grapes,Song of Fortune,Pork Barrel,Ashen,Brooding,Purple Tongue,Green Tongue,Orange Tongue,Red Tongue,Blue Tongue,Black Tongue,Cupcake of Choice,The Cupcake of Wrath,Shiny Happy Cupcake,Your Cupcake Senses Are Tingling,Tiny Bubbles in the Cupcake,Broken Heart,Fiery Heart,Cold Hearted,Sweet Heart,Withered Heart,Lustful Heart,Pasta Eyeball,Cowlick,It's Ridiculous,Dangerous Zone Song,Tiffany's Breakfast,Flashy Dance Song,Pet Shop Song,Dark Orchestral Song,Bounty of Renenutet,Octolus Gift,Magnetized Ears,Lucky Struck,Drunk and Avuncular,Ministrations in the Dark,Record Hunger,SuperStar,Everything Looks Blue,Everything Looks Red,Everything Looks Yellow,Snow Fortified,Bubble Vision,High-Falutin',Song of Accompaniment,Song of Cockiness,Song of the Glorious Lunch,Song of the Southern Turtle,Song of Sauce,Song of Bravado,Song of Slowness,Song of Starch,Song of the North,It's a Good Life!,I'll Have the Soup,Why So Serious?,&quot;The Disease&quot;,Unmuffled,Overconfident,Shrieking Weasel,Biker Swagger,Punchable Face,ChibiChanged&trade;,Avatar of She-Who-Was,Behind the Green Curtain,Industrially Frosted,Mer-kinkiness,Hotcaked,[1553]Slicked-Back Do,Eggscitingly Colorful,Party on Your Skin,Blessing of the Spaghetto,Force of Mayo Be With You,Ear Winds,Desenfantasmada,Skull Full of Hot Chocolate,Hide of Sobek,Wassailing You,Barrel Chested,Mimeoflage,Tainted Love Potion,Avatar of the Storm Tortoise,Fortunate\, Son,Avatar of the War Snapper,Faerie Fortune,Heroic Fortune,Fantasy Faerie Blessing,Brewed Up,Poison For Blood,Fantastical Health,Spirit of Galactic Unity,Inner Elf,The Best Hair You've Ever Had,Hardened Sweatshirt,Yeast-Hungry,More Mansquito Than Man,Spiced Up,Warlock\, Warstock\, and Warbarrel,Tomes of Opportunity,Temporary Blindness,Rolando's Rondo of Resisto,Shielded Unit,Mist Form,Cinco Elementos,Brined Liver,There's No N in Love,Sacr&eacute; Mental,Transpondent,Hidden Power,Skeletal Buddy,Down the Rabbit Hole,Perceptive Pressure,Proficient Pressure,Pneumatic,Finstrong,Omphaloskepsis,Burning\, Man,Snarl of the Timberwolf,Savage Beast,Mild-Mannered Professor]; //'
 //Works: Driving Wastefully, Driving Stealthily, rest untested
+
+//to blacklist all nohookah effects - DN
+boolean [effect] __genie_invalid_effects; //'
+foreach eff in $effects[]{
+	if (eff.attributes.contains_text("nohookah"))
+		__genie_invalid_effects[eff]=true;		
+}
+//read a user set property and blacklisted those effects too. expect comma seprated effect ids (eg '2897,2898') -DN
+foreach num,eff in split_string(get_property("genieBlacklist"),","){
+	if (to_effect(eff)!=$effect[none])
+		__genie_invalid_effects[to_effect(eff)]=true;		
+	print("user blacklisted: "+to_effect(eff));
+	}
+//adds (old) hardcoded list to blacklist
+foreach eff in __genie_invalid_effects1{
+	__genie_invalid_effects[eff]=true;		
+}
 
 boolean [string] __genie_invalid_monster_strings = $strings[Jerry Bradford\, Pokéfam World Champion];
 boolean [string] __genie_invalid_effect_strings = $strings[Double Negavision, Gettin' the Goods,Moose-Warmed Belly,Crimbeau'd,Bats Form,Heated Up,Strongly Motivated,Wolf Form,Yeg's Glory,Yeg's Keeping,Yeg's Power,Rictus of Yeg,Sigils of Yeg,Breath of Yeg,You Pray To Yeg Your Soul To Keep,Big Smile of the Blender,Big Smile of the Marmot,,Big Smile of the Mongoose,Big Smile of the Opossum,Big Smile of the Packrat,Big Smile of the Platypus,Big Smile of the Wallaby,Big Smile of the Vole,Big Smile of the Wombat,The Spirit of Taking,That's Just Cloud-Talk\, Man,Misty Form,Bat-Adjacent Form,Hot-Headed,Cold as Nice,A Brush with Grossness,Does It Have a Skull In There??,Lack of Body-Building,We're All Made of Starfish,Pomp & Circumsands,Resting Beach Face,Do I Know You From Somewhere?,You Learned Something Maybe!,Negavision,Boxing Day Breakfast,Boxing Day Drinking,Boxing Day Glow,She Ate Too Much Candy,Wolfish Form,Oiled\, Slick,Your Fifteen Minutes,Mind Vision,Impeccable Coiffure,Bone Springs,Power\, Man,Spa Day!,Iced and Tainted,Liquor-ish,Aerated,Wrought Nerves,A Girl Named Sue,Meet the Meat,Gunther Than Thou,Everybody Calls Him Gorgon,They Call Him Shifty Because...,Citronella Armpits,Baited Hook,A Real Head for Fish,High-Test Fishing Line,Juiced and Loose,Magicianship,Double-Barreled,Ancient Fortitude,Kicked in the Sinuses,Wisdom of Thoth,Prayer of Seshat,Power of Heka,La Oscuridad Adentro,Sangre Brillante,Unbarking Dogs,Sugar-Frosted Pet Guts,Zero Energy,Glasshole,All Revved Up,Pompadour,Fauxhawk,It's Not Even Funny,Merry Smithsness,Smithsness Presence,Smithsness Dinner,Smithsness Cheer,Simmering,Soulerskates,Reassured,Arched Eyebrow of the Archmage,Wizard Squint,Bloody Potato Bits,Slinking Noodle Glob,Whispering Strands,Macaroni Coating,Penne Fedora,Spice Haze,Icy Glare,Racing!,Invisible (20 Minutes Ago),Confidence!,Watch Out!,Blessing of the War Snapper,Grand Blessing of the War Snapper,Glorious Blessing of the War Snapper,Blessing of She-Who-Was,Grand Blessing of She-Who-Was,Glorious Blessing of She-Who-Was,Blessing of the Storm Tortoise,Grand Blessing of the Storm Tortoise,Glorious Blessing of the Storm Tortoise,Fitter\, Bitter,Digitalis\, Dig It,Hare-Brained,Flyin' Drunk,Disco Smirk,Disco Leer,Suspicious Gaze,Knowing Smile,Spirit Souvenirs,Patient Smile,Spirit Schooled,My Breakfast With Andrea,The Champion's Breakfast,Hoppyness,Net Gain,Blade Rolling,Jamming with the Jocks,Nerd is the Word,Greaser Lightnin',Well-Rested,Scowl of the Auk,Fightin' Drunk,Thinkin' Drunk,Jokin' Drunk,It Went Through All Right,Ready to Roll,Grand Theft Candy,]; //' because errors on older versions
@@ -4976,7 +5003,7 @@ boolean [effect] genieValidEffects()
 		effect e = s.to_effect();
 		if (e != $effect[none])
 			additional_invalid_effects[e] = true;
-		else if (my_id() == 1557284)
+		else if (my_id() == 1557284) //Ezandora
 			print_html("Unknown effect " + s);
 	}
 	foreach e in $effects[]
@@ -4985,7 +5012,9 @@ boolean [effect] genieValidEffects()
 		if (additional_invalid_effects contains e) continue;
 		__genie_valid_effects[e] = true;
 	}
-	/*foreach e in $effects[]
+//shows which effects are thought to be wishable but marked "nohookah" in mafia
+	/*
+	foreach e in $effects[]
 	{
 		boolean our_belief = false;
 		if (__genie_invalid_effects contains e || additional_invalid_effects contains e)
@@ -4995,7 +5024,8 @@ boolean [effect] genieValidEffects()
 		boolean nohookah_belief = e.attributes.contains_text("nohookah");
 		if (our_belief != nohookah_belief)
 			print_html("\"" + e + "\" we believe to be " + our_belief + ", nohookah is " + nohookah_belief);
-	}*/
+	}
+	*/
 	return __genie_valid_effects;
 }
 
