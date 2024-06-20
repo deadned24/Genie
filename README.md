@@ -17,5 +17,6 @@ Screenshots
 
 Notes
 ----------------
-* THIS version has 'nohookah' effects blacklisted.
-* You can add effects to the blacklist by setting a preference "genieBlacklist" with a comma separated list of effect ids \(eg: set genieBlacklist=2897,2898\). Will require restarting mafia to take effect.
+* This version blacklists 'nohookah' effects.
+* To add effects to the blacklist, set the preference 'genieBlacklist' with a comma-separated list of effect IDs (e.g., ```set genieBlacklist=2897,2898```). You will need to restart Mafia for the changes to take effect.
+
