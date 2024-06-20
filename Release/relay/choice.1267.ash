@@ -1763,7 +1763,7 @@ boolean [location] locationToLocationMap(location l)
 
 
 
-buffer to_buffer(string str)
+buffer to_EZbuffer(string str)
 {
 	buffer result;
 	result.append(str);
@@ -1888,7 +1888,7 @@ boolean stringHasSuffix(string s, string suffix)
 
 string capitaliseFirstLetter(string v)
 {
-	buffer buf = v.to_buffer();
+	buffer buf = v.to_EZbuffer();
 	if (v.length() <= 0)
 		return v;
 	buf.replace(0, 1, buf.char_at(0).to_upper_case());
@@ -3689,7 +3689,7 @@ buffer prepend(buffer in_buffer, buffer value)
 
 buffer prepend(buffer in_buffer, string value)
 {
-    return prepend(in_buffer, value.to_buffer());
+    return prepend(in_buffer, value.to_EZbuffer());
 }
 
 float pressurePenaltyForLocation(location l, Error could_get_value)
@@ -5665,6 +5665,7 @@ buffer genieGenerateSecondaryHardcodedWishes()
 	string [effect] effect_descriptions;
 	
 	boolean [effect] desired_effects;
+	/* //milk no longer works this way -DN
 	if (fullness_limit() - my_fullness() > 0)
 	{
 		if ($item[milk of magnesium].available_amount() == 0) //'
@@ -5673,6 +5674,7 @@ buffer genieGenerateSecondaryHardcodedWishes()
 		//effect_descriptions[$effect[Barrel of Laughs]] = "+4 adv from food";
 		//FIXME The Tunger™ (probably not)
 	}
+	*/
 	if (inebriety_limit() - my_inebriety() >= 0)
 	{
 		if (!$skill[the ode to booze].skill_is_usable())
@@ -5680,10 +5682,18 @@ buffer genieGenerateSecondaryHardcodedWishes()
 		//desired_effects[$effect[Beer Barrel Polka]] = true;
 		//effect_descriptions[$effect[Beer Barrel Polka]] = "+4 adv from booze";
 	}
+
+	//"craft tea" is better than inigos since it doesn't take a song slot. 
+	desired_effects[$effect[craft tea]] = true;
+	effect_descriptions[$effect[craft tea]] = "craft for free";
+/*
 	if (!($skill[Inigo's Incantation of Inspiration].skill_is_usable() && $skill[Inigo's Incantation of Inspiration].is_unrestricted() && $effect[Inigo's Incantation of Inspiration].have_effect() == 0)) //'
 		desired_effects[$effect[Inigo's Incantation of Inspiration]] = true; //'
 	effect_descriptions[$effect[Inigo's Incantation of Inspiration]] = "craft for free"; //'
+*/
 	
+	desired_effects[$effect[Offhand Remarkable]] = true;
+	effect_descriptions[$effect[Offhand Remarkable]] = "doubles offhand enchantments";
 	
 	desired_effects[$effect[super skill]] = true;
 	effect_descriptions[$effect[super skill]] = "0MP skills";
